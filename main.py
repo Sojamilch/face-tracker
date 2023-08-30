@@ -64,6 +64,9 @@ def main():
     else:
         print("Camera found.")
 
+    if (blank):
+        print("Blank mode enabled.")
+
     returnCode, frame = videoCapture.read()
 
     # Check if first frame is valid:
@@ -84,13 +87,6 @@ def main():
         minSize=(30, 50),
         flags=cv2.CASCADE_SCALE_IMAGE
     )
-
-    # Blank frame for showing only bounding boxes
-    if (blank):
-        blankFrame = np.zeros((height, width, 3), np.uint8)
-        Render(blankFrame, faces)
-    else:
-        Render(frame, faces)
 
     # Track FPS
     time = cv2.getTickCount()
@@ -123,7 +119,12 @@ def main():
 
             count = 0
 
-        Render(frame, faces)
+        # Blank frame for showing only bounding boxes
+        if (blank):
+            blankFrame = np.zeros((height, width, 3), np.uint8)
+            Render(blankFrame, faces)
+        else:
+            Render(frame, faces)
 
     print("\nGoodbye.")
     videoCapture.release()
